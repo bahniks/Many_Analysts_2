@@ -59,18 +59,18 @@ results <- function(model, effect, family = "linear") {
 # ANALYSIS
 #===============================================================================
 d <- read.csv("edge1.1.csv", head = T, as.is = T)
-
-
 remove <- d$UniqueContributors < 2 & d$Type == 2
 d <- d[!remove,]
 d$Role <- factor(d$Role)
 
+mccall <- function(x) qnorm((rank(x, ties.method = "average") - 0.5) / length(x))
 qd <- d[d$Type == 1,]
-cd <- data = d[d$Type == 2 & d$Role == 2,]
+cd <- d[d$Type == 2 & d$Role == 2,]
+qd <- cbind(qd, mccall.WC = mccall(qd$WC))
 
 
 # Hypothesis 1a
-m1a.Q <- lmer(Number.Characters ~ AcademicHierarchyStrict + + (1|ThreadId) + (1|Id), 
+m1a.Q <- lmer(mccall.WC ~ AcademicHierarchyStrict + + (1|ThreadId) + (1|Id), 
               data = d[d$Type == 1,])
 summary(m1a.Q)
 m1a.C <- lmer(Number.Characters ~ AcademicHierarchyStrict + UniqueContributors + (1|Id), 
