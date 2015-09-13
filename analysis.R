@@ -1,16 +1,77 @@
-library(lme4)
+#===============================================================================
+# LIBRARIES
+#===============================================================================
+for(pack in c("lme4", "lmerTest")) {
+  if(!(pack %in% installed.packages()[,1])) {
+    install.packages(pack)  
+  }
+  library(pack, character.only = T)
+}
 
 
+#===============================================================================
+# HELPER FUNCTIONS
+#===============================================================================
+# formating p-values
+round_p <- function(x) {
+  if(x < .001) return("p < .001") 
+  if(round(x, 2) == 1) return("p = 1")
+  
+  if(round(x, 3) >= .01) {
+    p <- sprintf("%.2f", x)
+  } else {
+    p <- sprintf("%.3f", x)
+  }
+  
+  return(paste("p = ", substr(p, 2, nchar(p)), sep = ""))
+}
+
+# function for displaying results
+results <- function(model, effect, family = "linear") {
+  coefs <- summary(model)$coefficients
+  if(family == "binomial") {
+    z <- coefs[effect, "z value"]
+    p <- coefs[effect, "Pr(>|z|)"]
+    e.name <- "OR"
+    par <- "z"
+  } else {
+    z <- coefs[effect, "t value"]
+    p <- coefs[effect, "Pr(>|t|)"]        
+    e.name <- "b"
+    par <- paste0("t(", sprintf("%.1f", coefs[effect, "df"]), ")")
+  }
+  ES <- fixef(model)[effect]
+  CI <- confint.merMod(model, effect, method = "Wald")
+  if(family == "binomial") {
+    ES <- exp(ES)
+    CI <- exp(CI)
+  }
+  cat(par, " = ", sprintf("%.2f", z), ", ", 
+      round_p(p), ", ",
+      e.name, " = ", sprintf("%.2f", ES), ", ",
+      "95% CI = [", sprintf("%.2f", CI[1]), ", ",
+      sprintf("%.2f", CI[2]), "]",
+      sep = "")
+}
+
+
+#===============================================================================
+# ANALYSIS
+#===============================================================================
 d <- read.csv("edge1.1.csv", head = T, as.is = T)
-simple <- read.csv("edge_simple1.1.csv", head = T, as.is = T)
+
 
 remove <- d$UniqueContributors < 2 & d$Type == 2
 d <- d[!remove,]
 d$Role <- factor(d$Role)
 
+qd <- d[d$Type == 1,]
+cd <- data = d[d$Type == 2 & d$Role == 2,]
+
 
 # Hypothesis 1a
-m1a.Q <- lmer(Number.Characters ~ AcademicHierarchyStrict + (1|Id), data = d[d$Type == 1,])
+m1a.Q <- lmer(Number.Characters ~ AcademicHierarchyStrict + + (1|ThreadId) + (1|Id), 
+              data = d[d$Type == 1,])
 summary(m1a.Q)
 m1a.C <- lmer(Number.Characters ~ AcademicHierarchyStrict + UniqueContributors + (1|Id), 
               data = d[d$Type == 2 & d$Role == 2,])
