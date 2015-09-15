@@ -1,166 +1,163 @@
+`r source("analysis.R")`
+
 This questionnaire will be used to collect answers detailing the statistical approach that your research team has taken. Your answers will then be used to facilitate the round-robin peer review process.
 
 Please provide enough information for a naive empiricist to be able to give you valuable feedback. Remember, not all individuals involved in this project come from the same discipline, so some methods might be unfamiliar/have a different name to those in other areas. 
 
 There are two sections: one that will be shared with other researchers, and one that we will use internally to get a good first idea about actual results. Only the analytic methods will be shared with the crowdsourcing groups to avoid bias.
 
-
-#What is your name and those of any team members?   
+#####What is your name and those of any team members?   
 Stepan Bahnik    
 
-==========================================================
-#What transformations (if any) were applied to the variables. Please be specific. 
+#####What transformations (if any) were applied to the variables. Please be specific. 
+I used two dependent variables. For testing hypotheses about verbosity and female participation I used the word count variable which I transformed using McCall's area transformation (i.e. computed a rank of the values and normalized the ranks, such that the resulting values had normal distribution with mean 0 and SD 1). For testing hypotheses about dominance, I used McCall's transformation on 'we' and 'i' variables from LIWC, I substracted the 'i' variable from the 'we' variable and used McCall's transformation again.
 
+#####Were any cases excluded, and why?
+I used only data from annual questions when analyzing verbosity and data from conversations when analyzing dominance. I hypothesized that it is unlikely that dominant language would show up in answers to annual questions and I suspected that there is too much variability in verbosity in conversations to test any hypothesis reasonably (since the the parts of conversations range from simple remarks to long soliloquies). From conversations data, I also excluded any contributions 50 words long or shorter (since the proportion of 'we' or 'I' pronouns would be highly variable). I used AcademicHierarchyStrict variable as a proxy for status, so any data with missing values for this variable were excluded for testing the corresponding hypotheses.
 
-#Were any cases excluded, and why?
-
-
-==========================================================
-#Did you create a custom dictionary using the website provided?
+#####Did you create a custom dictionary using the website provided?
 No 
 
-#If you created a dictionary, please list the words you used here
+#####If you created a dictionary, please list the words you used here
+  
 
+#####If you used only the text indices provided to operationalize dominance, please list them here and what weights they were given.
+'we' - 'i', i.e. the same weight {in particular: `mccall(mccall(data$we) - mccall(data$i))`}
+The operationalization was based on findings showing that more powerful people use ‘we’ pronouns more and ‘i’ less than less powerful people.
 
-#If you used only the text indices provided to operationalize dominance, please list them here and what weights they were given.
+#####If you used  the text indices provided and created your own dictionary to operationalize dominance, please list them here and what weights they were given.
+  
 
+#####How did you operationalize verbosity?
+as 'WC', i.e. word count
 
-#If you used  the text indices provided and created your own dictionary to operationalize dominance, please list them here and what weights they were given.
+#####What are the theoretical reasons for operationalizing verbosity in that manner?
+The number of words seems like a reasonable proxy for verbosity.
 
+#####How did you operationalize status?
+as the AcademicHierarchyStrict variable
 
-#How did you operationalize verbosity?
+#####What are the theoretical reasons for operationalizing status in that manner?
+The reasons were mostly practical, not so much theoretical.
 
+#####What is the name of the statistical technique that you employed?
+multilevel modeling
 
-#What are the theoretical reasons for operationalizing verbosity in that manner?
+#####Please describe the statistical technique you chose in more detail. Be specific, especially if your choice is not one you consider to be well-known. 
+Multilevel modeling can account for dependency in data.
 
+#####What are some references for the statistical technique that you chose?
+Gelman, A., & Hill, J. (2007). Data Analysis Using Regression and Multilevel/Hierarchical Models.
 
-#How did you operationalize status?
-
-
-#What are the theoretical reasons for operationalizing status in that manner?
-
-
-===============================================
-#What is the name of the statistical technique that you employed?
-
-
-#Please describe the statistical technique you chose in more detail. Be specific, especially if your choice is not one you consider to be well-known. 
-
-
-#What are some references for the statistical technique that you chose?
-
-
-#Which software did you use? If you used multiple kinds, please indicate what was accomplished with each piece of software (e.g., Data cleaning - R; Model estimation - SAS)
+#####Which software did you use? If you used multiple kinds, please indicate what was accomplished with each piece of software (e.g., Data cleaning - R; Model estimation - SAS)
 R
 
-#What variables were included as covariates (or control variables) when testing hypothesis 1a: higher status participants are more verbose than are lower status participants?
+#####What variables were included as covariates (or control variables) when testing hypothesis 1a: higher status participants are more verbose than are lower status participants?
+variable intercepts for Id and ThreadId  
 
+#####What variables were included as covariates (or control variables) when testing hypothesis 1b: higher status participants use more dominant language than do lower status participants?
+Role, variable intercepts for Id and ThreadId 
 
-#What variables were included as covariates (or control variables) when testing hypothesis 1b: higher status participants use more dominant language than do lower status participants?
+#####What variables were included as covariates (or control variables) when testing hypothesis 1c: male participants are more verbose than female participants?
+variable intercepts for Id and ThreadId 
 
+#####What variables were included as covariates (or control variables) when testing hypothesis 1d: male participants use more dominant language than do female participants?
+Role, variable intercepts for Id and ThreadId
 
-#What variables were included as covariates (or control variables) when testing hypothesis 1c: male participants are more verbose than female participants?
+#####What variables were included as covariates (or control variables) when testing hypothesis 2a: Gender and status interact, such that high status is a better predictor of verbosity for male scientists than for female scientists?
+variable intercepts for Id and ThreadId 
 
+#####What variables were included as covariates (or control variables) when testing hypothesis 2b: Gender and status interact, such that high status is a better predictor of dominant language among male scientists than for female scientists?
+Role, variable intercepts for Id and ThreadId
 
-#What variables were included as covariates (or control variables) when testing hypothesis 1d: male participants use more dominant language than do female participants?
+#####What variables were included as covariates (or control variables) when testing hypothesis 3a: Very low and very high status participants are the least likely to be verbose?
+variable intercepts for Id and ThreadId 
 
+#####What variables were included as covariates (or control variables) when testing hypothesis 3b:  Very low and very high status participants are the least likely to use dominant language?
+Role, variable intercepts for Id and ThreadId
 
-#What variables were included as covariates (or control variables) when testing hypothesis 2a: Gender and status interact, such that high status is a better predictor of verbosity for male scientists than for female scientists?
+#####What variables were included as covariates (or control variables) when testing hypothesis 4:  Female participation correlates with the number of females in the discussion?
+variable intercepts for Id and ThreadId 
 
+#####What variables were included as covariates (or control variables) when testing hypothesis 5a:  The effect of gender on verbosity will be the strongest in live conversations and attenuated for the asynchronous format conversations?
+variable intercepts for Id and ThreadId 
 
-#What variables were included as covariates (or control variables) when testing hypothesis 2b: Gender and status interact, such that high status is a better predictor of dominant language among male scientists than for female scientists?
+#####What variables were included as covariates (or control variables) when testing hypothesis 5b: The effect of gender on verbosity will be the strongest in live conversations and attenuated for the asynchronous format conversations?
+Role, variable intercepts for Id and ThreadId
 
+#####What theoretical and/or statistical rationale was used for your choice of covariates included in the models?
+It seemed that role in the conversation may explain large part of the error variance.
 
-#What variables were included as covariates (or control variables) when testing hypothesis 3a: Very low and very high status participants are the least likely to be verbose?
+#####What unit is your effect size in?
+non-standardized coefficient in a multilevel model; however, all DVs had standardized normal distribution, which makes interpretation easier
 
+#####What is the size of the effect for hypothesis 1a: higher status participants are more verbose than are lower status participants?
+`r results(m1a, 2)[1]`
 
-#What variables were included as covariates (or control variables) when testing hypothesis 3b:  Very low and very high status participants are the least likely to use dominant language?
+#####Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
+`r results(m1a, 2)[2]`
 
+#####What is the size of the effect for hypothesis 1b: higher status participants use more dominant language than do lower status participants?
+`r results(m1b, 2)[1]`
 
-#What variables were included as covariates (or control variables) when testing hypothesis 4:  Female participation correlates with the number of females in the discussion?
+#####Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
+`r results(m1b, 2)[2]`
 
+#####What is the size of the effect for hypothesis 1c: male participants are more verbose than female participants?
+`r results(m1c, 2)[1]`
 
-#What variables were included as covariates (or control variables) when testing hypothesis 5a:  The effect of gender on verbosity will be the strongest in live conversations and attenuated for the asynchronous format conversations?
+#####Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
+`r results(m1c, 2)[2]`
 
+#####What is the size of the effect for hypothesis 1d: male participants use more dominant language than do female participants?
+`r results(m1d, 2)[1]`
 
-#What variables were included as covariates (or control variables) when testing hypothesis 5b: The effect of gender on verbosity will be the strongest in live conversations and attenuated for the asynchronous format conversations?
+#####Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
+`r results(m1d, 2)[2]`
 
+#####What is the size of the effect for hypothesis 2a: Gender and status interact, such that high status is a better predictor of verbosity for male scientists than for female scientists?
+`r results(m2a, 4)[1]`
 
-#What theoretical and/or statistical rationale was used for your choice of covariates included in the models?
+#####Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
+`r results(m2a, 4)[2]`
 
+#####What is the size of the effect for hypothesis 2b: Gender and status interact, such that high status is a better predictor of dominant language among male scientists than for female scientists?
+`r results(m2b, 4)[1]`
 
-========================================================
-#What unit is your effect size in?
+#####Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
+`r results(m2b, 4)[2]`
 
+#####What is the size of the effect for hypothesis 3a: Very low and very high status participants are the least likely to be verbose?
+`r results(m3a, 2)[1]`
 
-#What is the size of the effect for hypothesis 1a: higher status participants are more verbose than are lower status participants?
+#####Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
+`r results(m3a, 2)[2]`
 
+#####What is the size of the effect for hypothesis 3b:  Very low and very high status participants are the least likely to use dominant language?
+`r results(m3b, 2)[1]`
 
-#Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
+#####Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
+`r results(m3b, 2)[2]`
 
+#####What is the size of the effect for hypothesis 4:  Female participation correlates with the number of females in the discussion?
+`r results(m4, 4)[1]`
 
-#What is the size of the effect for hypothesis 1b: higher status participants use more dominant language than do lower status participants?
+#####Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
+`r results(m4, 4)[2]`
 
+#####What is the size of the effect for hypothesis 5a:  The effect of gender on verbosity will be the strongest in live conversations and attenuated for the asynchronous format conversations?
+`r results(m5a, 4)[1]`
 
-#Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
+#####Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
+`r results(m5a, 4)[2]`
 
+#####What is the size of the effect for hypothesis 5b: The effect of gender on verbosity will be the strongest in live conversations and attenuated for the asynchronous format conversations?
+`r results(m5b, 4)[1]`
 
-#What is the size of the effect for hypothesis 1c: male participants are more verbose than female participants?
+#####Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
+`r results(m5b, 4)[2]`
 
+#####What other steps/analyses did you run that are worth mentioning? Include effect sizes in a similar format as above if necessary.
+  
 
-#Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
-
-
-#What is the size of the effect for hypothesis 1d: male participants use more dominant language than do female participants?
-
-
-#Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
-
-
-#What is the size of the effect for hypothesis 2a: Gender and status interact, such that high status is a better predictor of verbosity for male scientists than for female scientists?
-
-
-#Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
-
-
-#What is the size of the effect for hypothesis 2b: Gender and status interact, such that high status is a better predictor of dominant language among male scientists than for female scientists?
-
-
-#Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
-
-
-#What is the size of the effect for hypothesis 3a: Very low and very high status participants are the least likely to be verbose?
-
-
-#Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
-
-
-#What is the size of the effect for hypothesis 3b:  Very low and very high status participants are the least likely to use dominant language?
-
-
-#Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
-
-
-#What is the size of the effect for hypothesis 4:  Female participation correlates with the number of females in the discussion?
-
-
-#Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
-
-
-#What is the size of the effect for hypothesis 5a:  The effect of gender on verbosity will be the strongest in live conversations and attenuated for the asynchronous format conversations?
-
-
-#Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
-
-
-#What is the size of the effect for hypothesis 5b: The effect of gender on verbosity will be the strongest in live conversations and attenuated for the asynchronous format conversations?
-
-
-#Please specify the magnitude and direction of the effect size, along with the 95% confidence (or credible) interval in the following format: estimate [low interval, high interval]. Remember that this result will not be shared with other teams at this stage.
-
-
-#What other steps/analyses did you run that are worth mentioning? Include effect sizes in a similar format as above if necessary.
-
-
-#You may use the space below to paste the script you used to run the analyses. (Optional)
-
+#####You may use the space below to paste the script you used to run the analyses. (Optional)
