@@ -89,3 +89,29 @@ summary(m5a)
 # Hypothesis 5b
 m5b <- lmer(dominance ~ Male*Live + Role + (1|ThreadId) + (1|Id), data = cd)
 summary(m5b)
+
+# Additional Hypothesis 1.1
+qd <- cbind(qd, dominance = mccall(mccall(qd$we) - mccall(qd$i)))
+m6a <- lmer(dominance ~ AcademicHierarchyStrict + (1|ThreadId) + (1|Id), data = qd)
+summary(m6a)
+
+# Additional Hypothesis 1.2
+m6b <- lmer(dominance ~ Female + (1|ThreadId) + (1|Id), data = qd)
+summary(m6b)
+
+# Additional Hypothesis 1.3
+m6c <- lmer(dominance ~ AcademicHierarchyStrict + Role + (1|ThreadId) + (1|Id), data = cd)
+summary(m6c)
+
+# Additional Hypothesis 1.4
+
+
+# Additional Hypothesis 3.1
+m8a <- lmer(Exclam ~ AcademicHierarchyStrict + Role + (1|ThreadId) + (1|Id), data = cd)
+summary(m8a)
+
+# Additional Hypothesis 3.2
+m8b <- lmer(Exclam ~ Female + Role + (1|ThreadId) + (1|Id), data = cd)
+summary(m8b)
+
+
