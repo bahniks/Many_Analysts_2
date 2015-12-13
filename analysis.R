@@ -104,7 +104,40 @@ m6c <- lmer(dominance ~ AcademicHierarchyStrict + Role + (1|ThreadId) + (1|Id), 
 summary(m6c)
 
 # Additional Hypothesis 1.4
+people <- d[!duplicated(d$Id), c("Id", "Female", "AcademicHierarchyStrict")]
+cor.test(people$Female, people$AcademicHierarchyStrict,
+    use = "na.or.complete")
 
+# Additional Hypothesis 2.1
+cd2 <- d[d$Type == 2,]
+cd2 <- cbind(cd2, dominance = mccall(mccall(cd2$we) - mccall(cd2$i)))
+cd2 <- cbind(cd2, verbosity = mccall(cd2$WC))
+cd2 <- cbind(cd2, verbosity_prev = ifelse(cd2$Order == 1, NA, c(NA, cd2$verbosity)))
+cd2 <- cbind(cd2, dominance_prev = ifelse(cd2$Order == 1, NA, c(NA, cd2$dominance)))
+cd2 <- cbind(cd2, verbosity_post = ifelse(cd2$Order == cd2$DebateSize, NA, cd2$verbosity[-1]))
+cd2 <- cbind(cd2, dominance_post = ifelse(cd2$Order == cd2$DebateSize, NA, cd2$dominance[-1]))
+cd2 <- cd2[cd2$Order != 1 & cd2$Order != cd2$DebateSize ,]
+
+m7a <- lmer(verbosity ~ verbosity_prev + Role + Order + DebateSize + (1|ThreadId) + (1|Id), data = cd2)
+summary(m7a)
+
+# Additional Hypothesis 2.2
+m7b <- lmer(dominance ~ dominance_prev + dominance_post + Role + Order + DebateSize + (1|ThreadId) + (1|Id), data = cd2)
+summary(m7b)
+
+m7b2 <- lmer(dominance ~ dominance_post + Role + Order + DebateSize + (1|ThreadId) + (1|Id), data = cd2)
+anova(m7b2, m7b)
+
+# Additional Hypothesis 2.3
+m7c <- lmer(dominance ~ verbosity_prev + Role + Order + DebateSize + (1|ThreadId) + (1|Id), data = cd2)
+summary(m7c)
+
+# Additional Hypothesis 2.4
+m7d1 <- lmer(verbosity ~ verbosity_prev*Female + Role + Order + DebateSize + (1|ThreadId) + (1|Id), data = cd2)
+summary(m7d1)
+
+m7d2 <- lmer(verbosity ~ dominance_prev*Female + Role + Order + DebateSize + (1|ThreadId) + (1|Id), data = cd2)
+summary(m7d2)
 
 # Additional Hypothesis 3.1
 m8a <- lmer(Exclam ~ AcademicHierarchyStrict + Role + (1|ThreadId) + (1|Id), data = cd)
